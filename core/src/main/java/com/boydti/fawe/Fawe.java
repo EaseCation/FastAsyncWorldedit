@@ -238,7 +238,7 @@ public class Fawe {
             }
         });
 
-        if (Settings.IMP.METRICS) {
+        if (false && Settings.IMP.METRICS) {
             try {
                 this.stats = new BStats();
                 this.IMP.startMetrics();
@@ -260,7 +260,7 @@ public class Fawe {
         this.timer = new FaweTimer();
         Fawe.this.IMP.setupVault();
 
-        File jar = MainUtil.getJarFile();
+        /*File jar = MainUtil.getJarFile();
         File extraBlocks = MainUtil.copyFile(jar, "extrablocks.json", null);
         if (extraBlocks != null && extraBlocks.exists()) {
             TaskManager.IMP.task(() -> {
@@ -272,7 +272,7 @@ public class Fawe {
                     Fawe.debug("Invalid format: extrablocks.json");
                 }
             });
-        }
+        }*/
 
         // Delayed worldedit setup
         TaskManager.IMP.later(() -> {

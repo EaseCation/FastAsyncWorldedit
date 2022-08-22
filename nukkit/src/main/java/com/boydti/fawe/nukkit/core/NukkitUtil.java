@@ -142,8 +142,7 @@ public final class NukkitUtil {
         int x = pos.getBlockX();
         int y = pos.getBlockY();
         int z = pos.getBlockZ();
-        level.setBlockIdAt(x, y, z, block.getId());
-        level.setBlockDataAt(x, y, z, block.getData());
+        level.setBlock(x, y, z, Block.get(block.getId(), block.getData()), false, false);
         return true;
 
     }

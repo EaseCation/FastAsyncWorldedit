@@ -61,7 +61,7 @@ public class NukkitQueue extends NMSMappedFaweQueue<Level, BaseFullChunk, BaseFu
 
     @Override
     public void setHeightMap(FaweChunk chunk, byte[] heightMap) {
-        BaseFullChunk forgeChunk = (BaseFullChunk) chunk.getChunk();
+        /*BaseFullChunk forgeChunk = (BaseFullChunk) chunk.getChunk();
         if (forgeChunk != null) {
             byte[] otherMap = forgeChunk.getHeightMapArray();
             for (int i = 0; i < heightMap.length; i++) {
@@ -71,7 +71,7 @@ public class NukkitQueue extends NMSMappedFaweQueue<Level, BaseFullChunk, BaseFu
                     otherMap[i] = (byte) newHeight;
                 }
             }
-        }
+        }*/
     }
 
     public FaweNukkit getFaweNukkit() {
@@ -80,19 +80,19 @@ public class NukkitQueue extends NMSMappedFaweQueue<Level, BaseFullChunk, BaseFu
 
     @Override
     public int getOpacity(BaseFullChunk section, int x, int y, int z) {
-        int id = section.getBlockId(x & 15, y, z & 15);
+        int id = section.getBlockId(0, x & 15, y, z & 15);
         return Block.lightFilter[id];
     }
 
     @Override
     public int getBrightness(BaseFullChunk section, int x, int y, int z) {
-        int id = section.getBlockId(x & 15, y, z & 15);
+        int id = section.getBlockId(0, x & 15, y, z & 15);
         return Block.light[id];
     }
 
     @Override
     public int getOpacityBrightnessPair(BaseFullChunk section, int x, int y, int z) {
-        int id = section.getBlockId(x & 15, y, z & 15);
+        int id = section.getBlockId(0, x & 15, y, z & 15);
         int opacity = Block.lightFilter[id];
         int brightness = Block.light[id];
         return MathMan.pair16(opacity, brightness);
@@ -100,15 +100,7 @@ public class NukkitQueue extends NMSMappedFaweQueue<Level, BaseFullChunk, BaseFu
 
     @Override
     public void sendChunk(int x, int z, int bitMask) {
-        Collection<Player> players = faweNukkit.getPlugin().getServer().getOnlinePlayers().values();
-        int view = faweNukkit.getPlugin().getServer().getViewDistance();
-        for (Player player : players) {
-            Position pos = player.getPosition();
-            int pcx = pos.getFloorX() >> 4;
-            int pcz = pos.getFloorZ() >> 4;
-            if (Math.abs(pcx - x) > view || Math.abs(pcz - z) > view) {
-                continue;
-            }
+        for (Player player : world.getChunkPlayers(x, z).values()) {
             world.requestChunk(x, z, player);
         }
     }
@@ -157,8 +149,12 @@ public class NukkitQueue extends NMSMappedFaweQueue<Level, BaseFullChunk, BaseFu
                 }
             });
             Map<Level, List<Player>> playerMap = new HashMap<>();
+            long hash = Level.chunkHash(chunk.getX(), chunk.getZ());
             for (FawePlayer player : players) {
                 Player nukkitPlayer = ((FaweNukkitPlayer) player).parent;
+                if (!nukkitPlayer.usedChunks.containsKey(hash)) {
+                    continue;
+                }
                 List<Player> list = playerMap.get(nukkitPlayer.getLevel());
                 if (list == null) {
                     list = new ArrayList<>();
@@ -323,12 +319,12 @@ public class NukkitQueue extends NMSMappedFaweQueue<Level, BaseFullChunk, BaseFu
 
     @Override
     public int getCombinedId4Data(BaseFullChunk chunkSection, int x, int y, int z) {
-        int id = chunkSection.getBlockId(x & 15, y, z & 15);
+        int id = chunkSection.getBlockId(0, x & 15, y, z & 15);
         if (FaweCache.hasData(id)) {
-            int data = chunkSection.getBlockData(x & 15, y, z & 15);
-            return (id << 4) + data;
+            int data = chunkSection.getBlockData(0, x & 15, y, z & 15);
+            return (id << Block.BLOCK_META_BITS) | data;
         } else {
-            return (id << 4);
+            return (id << Block.BLOCK_META_BITS);
         }
     }
 

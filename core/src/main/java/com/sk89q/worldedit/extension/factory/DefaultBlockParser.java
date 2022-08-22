@@ -282,9 +282,9 @@ public class DefaultBlockParser extends InputParser<BaseBlock> {
                     }
                 }
 
-                if (data > 15) {
-                    throw new NoMatchException("Invalid data value '" + typeAndData[1] + "'");
-                }
+//                if (data > 15) {
+//                    throw new NoMatchException("Invalid data value '" + typeAndData[1] + "'");
+//                }
 
                 if (data < 0 && (context.isRestricted() || data != -1)) {
                     data = 0;

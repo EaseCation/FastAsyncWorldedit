@@ -1,5 +1,6 @@
 package com.boydti.fawe.example;
 
+import cn.nukkit.block.Block;
 import com.boydti.fawe.FaweCache;
 import com.boydti.fawe.object.FaweChunk;
 import com.boydti.fawe.object.FaweQueue;
@@ -10,7 +11,7 @@ import java.util.*;
 
 public abstract class CharFaweChunk<T, V extends FaweQueue> extends FaweChunk<T> {
 
-    public final char[][] ids;
+    public final int[][] ids;
     public final short[] count;
     public final short[] air;
     public final byte[] heightMap;
@@ -22,7 +23,7 @@ public abstract class CharFaweChunk<T, V extends FaweQueue> extends FaweChunk<T>
 
     public T chunk;
 
-    public CharFaweChunk(FaweQueue parent, int x, int z, char[][] ids, short[] count, short[] air, byte[] heightMap) {
+    public CharFaweChunk(FaweQueue parent, int x, int z, int[][] ids, short[] count, short[] air, byte[] heightMap) {
         super(parent, x, z);
         this.ids = ids;
         this.count = count;
@@ -39,7 +40,7 @@ public abstract class CharFaweChunk<T, V extends FaweQueue> extends FaweChunk<T>
      */
     public CharFaweChunk(FaweQueue parent, int x, int z) {
         super(parent, x, z);
-        this.ids = new char[HEIGHT >> 4][];
+        this.ids = new int[HEIGHT >> 4][];
         this.count = new short[HEIGHT >> 4];
         this.air = new short[HEIGHT >> 4];
         this.heightMap = new byte[256];
@@ -118,12 +119,12 @@ public abstract class CharFaweChunk<T, V extends FaweQueue> extends FaweChunk<T>
      * @return
      */
     @Override
-    public char[] getIdArray(final int i) {
+    public int[] getIdArray(final int i) {
         return this.ids[i];
     }
 
     @Override
-    public char[][] getCombinedIdArrays() {
+    public int[][] getCombinedIdArrays() {
         return this.ids;
     }
 
@@ -135,7 +136,7 @@ public abstract class CharFaweChunk<T, V extends FaweQueue> extends FaweChunk<T>
     @Override
     public int getBlockCombinedId(int x, int y, int z) {
         short i = FaweCache.CACHE_I[y][z][x];
-        char[] array = getIdArray(i);
+        int[] array = getIdArray(i);
         if (array == null) {
             return 0;
         }
@@ -195,9 +196,9 @@ public abstract class CharFaweChunk<T, V extends FaweQueue> extends FaweChunk<T>
     public void setBlock(int x, int y, int z, int id) {
         final int i = FaweCache.CACHE_I[y][z][x];
         final int j = FaweCache.CACHE_J[y][z][x];
-        char[] vs = this.ids[i];
+        int[] vs = this.ids[i];
         if (vs == null) {
-            vs = this.ids[i] = new char[4096];
+            vs = this.ids[i] = new int[4096];
             this.count[i]++;
         } else {
             switch (vs[j]) {
@@ -231,7 +232,7 @@ public abstract class CharFaweChunk<T, V extends FaweQueue> extends FaweChunk<T>
             case 50:
             case 10:
             default:
-                vs[j] = (char) (id << 4);
+                vs[j] = id << Block.BLOCK_META_BITS;
                 heightMap[z << 4 | x] = (byte) y;
                 return;
         }
@@ -241,9 +242,9 @@ public abstract class CharFaweChunk<T, V extends FaweQueue> extends FaweChunk<T>
     public void setBlock(final int x, final int y, final int z, final int id, int data) {
         final int i = FaweCache.CACHE_I[y][z][x];
         final int j = FaweCache.CACHE_J[y][z][x];
-        char[] vs = this.ids[i];
+        int[] vs = this.ids[i];
         if (vs == null) {
-            vs = this.ids[i] = new char[4096];
+            vs = this.ids[i] = new int[4096];
             this.count[i]++;
         } else {
             switch (vs[j]) {
@@ -318,7 +319,7 @@ public abstract class CharFaweChunk<T, V extends FaweQueue> extends FaweChunk<T>
             case 190:
             case 191:
             case 192:
-                vs[j] = (char) (id << 4);
+                vs[j] = id << Block.BLOCK_META_BITS;
                 heightMap[z << 4 | x] = (byte) y;
                 return;
             case 130:
@@ -335,7 +336,7 @@ public abstract class CharFaweChunk<T, V extends FaweQueue> extends FaweChunk<T>
             case 65:
             case 68: // removed
             default:
-                vs[j] = (char) ((id << 4) + data);
+                vs[j] = (id << Block.BLOCK_META_BITS) | data;
                 heightMap[z << 4 | x] = (byte) y;
                 return;
         }

@@ -14,6 +14,7 @@ public class RandomTextureUtil extends CachedTextureUtil {
     public RandomTextureUtil(TextureUtil parent) throws FileNotFoundException {
         super(parent);
         this.grassColor = parent.getColor(FaweCache.getBlock(BlockID.GRASS, 0));
+        offsets.defaultReturnValue(0);
     }
 
     private int index;
@@ -83,7 +84,7 @@ public class RandomTextureUtil extends CachedTextureUtil {
 
     @Override
     public BaseBlock getNearestBlock(int color) {
-        int offsetColor = offsets.getOrDefault(color, 0);
+        int offsetColor = offsets.get(color);
         if (offsetColor != 0) {
             offsetColor = addRandomColor(color, offsetColor);
         } else {

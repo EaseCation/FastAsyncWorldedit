@@ -9,7 +9,7 @@ public class NullQueueCharFaweChunk extends CharFaweChunk {
         super(null, cx, cz);
     }
 
-    public NullQueueCharFaweChunk(int x, int z, char[][] ids, short[] count, short[] air, byte[] heightMap) {
+    public NullQueueCharFaweChunk(int x, int z, int[][] ids, short[] count, short[] air, byte[] heightMap) {
         super(null, x, z, ids, count, air, heightMap);
     }
 
@@ -23,7 +23,7 @@ public class NullQueueCharFaweChunk extends CharFaweChunk {
         if (shallow) {
             return new NullQueueCharFaweChunk(getX(), getZ(), ids, count, air, heightMap);
         } else {
-            return new NullQueueCharFaweChunk(getX(), getZ(), (char[][]) MainUtil.copyNd(ids), count.clone(), air.clone(), heightMap.clone());
+            return new NullQueueCharFaweChunk(getX(), getZ(), (int[][]) MainUtil.copyNd(ids), count.clone(), air.clone(), heightMap.clone());
         }
     }
 

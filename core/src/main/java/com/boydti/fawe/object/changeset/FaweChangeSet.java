@@ -288,11 +288,11 @@ public abstract class FaweChangeSet implements ChangeSet {
                                 }
                                 // Block changes
                                 for (int layer = 0; layer < layers; layer++) {
-                                    char[] currentLayer = next.getIdArray(layer);
+                                    int[] currentLayer = next.getIdArray(layer);
                                     if (currentLayer == null) {
                                         continue;
                                     }
-                                    char[] previousLayer = previous.getIdArray(layer);
+                                    int[] previousLayer = previous.getIdArray(layer);
                                     int startY = layer << 4;
                                     int index = 0;
                                     for (int y = 0; y < 16; y++) {
@@ -308,7 +308,7 @@ public abstract class FaweChangeSet implements ChangeSet {
                                                     case 1:
                                                         combinedIdCurrent = 0;
                                                     default:
-                                                        char combinedIdPrevious = previousLayer != null ? previousLayer[index] : 0;
+                                                        int combinedIdPrevious = previousLayer != null ? previousLayer[index] : 0;
                                                         if (combinedIdCurrent != combinedIdPrevious) {
                                                             add(xx, yy, zz, combinedIdPrevious, combinedIdCurrent);
                                                         }

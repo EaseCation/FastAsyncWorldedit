@@ -73,7 +73,7 @@ public abstract class LazyFaweChunk<T extends FaweChunk> extends FaweChunk {
 
     @Override
     @Nullable
-    public char[] getIdArray(int layer) {
+    public int[] getIdArray(int layer) {
         return internalGetOrCacheChunk().getIdArray(layer);
     }
 
@@ -98,7 +98,7 @@ public abstract class LazyFaweChunk<T extends FaweChunk> extends FaweChunk {
     }
 
     @Override
-    public char[][] getCombinedIdArrays() {
+    public int[][] getCombinedIdArrays() {
         return internalGetOrCacheChunk().getCombinedIdArrays();
     }
 

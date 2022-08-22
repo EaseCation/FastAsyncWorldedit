@@ -160,7 +160,6 @@ public class Yaml {
         representer.setDefaultScalarStyle(dumperOptions.getDefaultScalarStyle());
         representer.getPropertyUtils().setAllowReadOnlyProperties(
                 dumperOptions.isAllowReadOnlyProperties());
-        representer.setTimeZone(dumperOptions.getTimeZone());
         this.representer = representer;
         this.dumperOptions = dumperOptions;
         this.resolver = resolver;

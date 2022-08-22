@@ -15,6 +15,11 @@ public class DelegateFormWindow extends FormWindow {
     }
 
     @Override
+    public String getTitle() {
+        return "";
+    }
+
+    @Override
     public void setResponse(String s) {
         parent.setResponse(s);
     }

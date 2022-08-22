@@ -1,5 +1,6 @@
 package com.boydti.fawe;
 
+import cn.nukkit.block.Block;
 import com.boydti.fawe.object.PseudoRandom;
 import com.sk89q.jnbt.ByteArrayTag;
 import com.sk89q.jnbt.ByteTag;
@@ -68,7 +69,7 @@ public class FaweCache {
      * Immutable BaseBlock cache
      * [ combined ] => block
      */
-    public final static BaseBlock[] CACHE_BLOCK = new BaseBlock[Character.MAX_VALUE + 1];
+    public final static BaseBlock[] CACHE_BLOCK = new BaseBlock[Block.FULL_BLOCK_COUNT];
 
     public final static BaseItem[] CACHE_ITEM = new BaseItem[Character.MAX_VALUE + 1];
 
@@ -77,7 +78,7 @@ public class FaweCache {
      */
     public final static PseudoRandom RANDOM = new PseudoRandom();
 
-    public final static Color[] CACHE_COLOR = new Color[Character.MAX_VALUE + 1];
+    public final static Color[] CACHE_COLOR = new Color[Block.FULL_BLOCK_COUNT];
 
     /**
      * Get the cached BaseBlock object for an id/data<br>
@@ -88,7 +89,7 @@ public class FaweCache {
      * @return
      */
     public static final BaseBlock getBlock(int id, int data) {
-        return CACHE_BLOCK[(id << 4) + data];
+        return CACHE_BLOCK[(id << Block.BLOCK_META_BITS) + data];
     }
 
     public static final BaseItem getItem(int id, int data) {
@@ -103,15 +104,15 @@ public class FaweCache {
      * @return
      */
     public static final int getCombined(int id, int data) {
-        return (id << 4) + data;
+        return (id << Block.BLOCK_META_BITS) + data;
     }
 
     public static final int getId(int combined) {
-        return combined >> 4;
+        return combined >> Block.BLOCK_META_BITS;
     }
 
     public static final int getData(int combined) {
-        return combined & 15;
+        return combined & Block.BLOCK_META_MASK;
     }
 
     /**
@@ -197,26 +198,26 @@ public class FaweCache {
                 }
             }
         }
-        try {
+        /*try {
             BundledBlockData bundled = BundledBlockData.getInstance();
             bundled.loadFromResource();
             for (int i = 0; i < Character.MAX_VALUE; i++) {
                 int id = i >> 4;
                 int data = i & 0xf;
-                CACHE_TRANSLUSCENT[i] = BlockType.isTranslucent(id);
-                CACHE_PASSTHROUGH[i] = BlockType.canPassThrough(id, data);
+//                CACHE_TRANSLUSCENT[i] = BlockType.isTranslucent(id);
+//                CACHE_PASSTHROUGH[i] = BlockType.canPassThrough(id, data);
                 BundledBlockData.BlockEntry blockEntry = bundled.findById(id);
                 if (blockEntry != null) {
                     BundledBlockData.FaweBlockMaterial material = blockEntry.material;
                     if (material != null) {
-                        CACHE_TRANSLUSCENT[i] = !material.isOpaque();
-                        CACHE_PASSTHROUGH[i] = !material.isMovementBlocker();
+//                        CACHE_TRANSLUSCENT[i] = !material.isOpaque();
+//                        CACHE_PASSTHROUGH[i] = !material.isMovementBlocker();
                     }
                 }
             }
         } catch (Throwable ignore) {
             ignore.printStackTrace();
-        }
+        }*/
         try {
             CACHE_COLOR[getCombined(0, 0)] = new Color(128, 128, 128); //Air
             CACHE_COLOR[getCombined(1, 0)] = new Color(180, 180, 180); //stone
@@ -292,7 +293,11 @@ public class FaweCache {
     }
 
     public static boolean canPassThrough(int id, int data) {
-        return CACHE_PASSTHROUGH[FaweCache.getCombined(id, data)];
+        if (id < 0 || id >= Block.BLOCK_ID_COUNT || data < 0 || data >= Block.BLOCK_META_COUNT) {
+            return false;
+        }
+        return Block.get(id, data).canPassThrough();
+//        return CACHE_PASSTHROUGH[FaweCache.getCombined(id, data)];
     }
 
     public static boolean isTranslucent(int id, int data) {
@@ -424,7 +429,11 @@ public class FaweCache {
     }
 
     public static boolean isTransparent(int id) {
-        switch (id) {
+        if (id < 0 || id >= Block.BLOCK_ID_COUNT) {
+            return false;
+        }
+        return Block.get(id).isTransparent();
+        /*switch (id) {
             case 0:
             case 6:
             case 8:
@@ -565,7 +574,7 @@ public class FaweCache {
                 return true;
             default:
                 return false;
-        }
+        }*/
     }
 
     /**
@@ -575,7 +584,11 @@ public class FaweCache {
      * @return
      */
     public static boolean hasData(int id) {
-        switch (id) {
+        if (id < 0 || id >= Block.hasMeta.length) {
+            return false;
+        }
+        return Block.hasMeta[id];
+        /*switch (id) {
             case 0:
             case 2:
             case 4:
@@ -638,7 +651,7 @@ public class FaweCache {
                 return false;
             default:
                 return true;
-        }
+        }*/
     }
 
     /**
@@ -648,7 +661,11 @@ public class FaweCache {
      * @return
      */
     public static boolean hasNBT(int id) {
-        switch (id) {
+        if (id < 0 || id >= Block.BLOCK_ID_COUNT) {
+            return false;
+        }
+        return Block.get(id).getBlockEntityType() != 0;
+        /*switch (id) {
             case 26:
             case 218:
             case 54:
@@ -908,7 +925,7 @@ public class FaweCache {
                 return false;
             default:
                 return id > 252;
-        }
+        }*/
     }
 
     public static String getMaterialName(int combined) {

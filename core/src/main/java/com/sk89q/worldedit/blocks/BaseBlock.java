@@ -19,6 +19,7 @@
 
 package com.sk89q.worldedit.blocks;
 
+import cn.nukkit.block.Block;
 import com.boydti.fawe.FaweCache;
 import com.sk89q.jnbt.CompoundTag;
 import com.sk89q.jnbt.NBTInputStream;
@@ -75,13 +76,13 @@ public class BaseBlock implements TileEntityBlock, Pattern, Serializable {
      * reasons), which coincides with the number of possible IDs that official
      * Minecraft supports as of version 1.7.
      */
-    public static final int MAX_ID = 65535;
+    public static final int MAX_ID = Block.BLOCK_ID_COUNT;
 
     /**
      * Indicates the maximum data value (inclusive) that can be used. A future
      * version of Minecraft may abolish block data values.
      */
-    public static final int MAX_DATA = 15;
+    public static final int MAX_DATA = Block.BLOCK_META_COUNT;
 
     // Instances of this class should be _as small as possible_ because there will
     // be millions of instances of this object.

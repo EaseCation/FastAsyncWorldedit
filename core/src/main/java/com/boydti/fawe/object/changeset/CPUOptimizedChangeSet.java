@@ -24,12 +24,12 @@ public class CPUOptimizedChangeSet extends FaweChangeSet {
         queue.setChangeTask(new RunnableVal2<FaweChunk, FaweChunk>() {
             @Override
             public void run(final FaweChunk previous, final FaweChunk next) {
-                char[][] previousIds = previous.getCombinedIdArrays();
-                char[][] nextIds = next.getCombinedIdArrays();
+                int[][] previousIds = previous.getCombinedIdArrays();
+                int[][] nextIds = next.getCombinedIdArrays();
                 for (int i = 0; i < nextIds.length; i++) {
-                    char[] nextArray = nextIds[i];
+                    int[] nextArray = nextIds[i];
                     if (nextArray != null) {
-                        char[] previousArray = previousIds[i];
+                        int[] previousArray = previousIds[i];
                         if (previousArray == null) {
                             previous.fillCuboid(0, 15, i << 4, (i << 4) + 15, 0, 15, 0, (byte) 0);
                             continue;

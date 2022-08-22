@@ -95,7 +95,7 @@ public class FaweNukkit implements IFawe, Listener {
 
             } else if (response instanceof FormResponseCustom) {
                 FormResponseCustom custom = (FormResponseCustom) response;
-                HashMap<Integer, Object> responses = custom.getResponses();
+                Map<Integer, Object> responses = custom.getResponses();
 
                 HashMap<Integer, Object> parsedResponses = new HashMap<>();
                 for (Map.Entry<Integer, Object> responseEntry : responses.entrySet()) {

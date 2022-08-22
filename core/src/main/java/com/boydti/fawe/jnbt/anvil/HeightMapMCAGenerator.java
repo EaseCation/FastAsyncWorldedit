@@ -792,14 +792,14 @@ public class HeightMapMCAGenerator extends MCAWriter implements StreamChange, Dr
 
     @Override
     public void setChunk(FaweChunk chunk) {
-        char[][] src = chunk.getCombinedIdArrays();
+        int[][] src = chunk.getCombinedIdArrays();
         for (int i = 0; i < src.length; i++) {
             if (src[i] != null) {
                 int bx = chunk.getX() << 4;
                 int bz = chunk.getZ() << 4;
                 int by = i << 4;
                 for (int layer = i; layer < src.length; layer++) {
-                    char[] srcLayer = src[layer];
+                    int[] srcLayer = src[layer];
                     if (srcLayer != null) {
                         int index = 0;
                         for (int y = 0; y < 16; y++) {
@@ -807,7 +807,7 @@ public class HeightMapMCAGenerator extends MCAWriter implements StreamChange, Dr
                             for (int z = 0; z < 16; z++) {
                                 int zz = bz + z;
                                 for (int x = 0; x < 16; x++, index++) {
-                                    char combined = srcLayer[index];
+                                    int combined = srcLayer[index];
                                     if (combined != 0) {
                                         setBlock(bx + x, yy, zz, combined);
                                     }

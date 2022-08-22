@@ -25,12 +25,12 @@ public class NullFaweChunk extends FaweChunk<Void> {
     }
 
     @Override
-    public char[][] getCombinedIdArrays() {
-        return new char[16][];
+    public int[][] getCombinedIdArrays() {
+        return new int[16][];
     }
 
     @Override
-    public char[] getIdArray(int layer) {
+    public int[] getIdArray(int layer) {
         return null;
     }
 

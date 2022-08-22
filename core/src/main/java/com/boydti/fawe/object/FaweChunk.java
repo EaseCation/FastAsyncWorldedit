@@ -139,15 +139,15 @@ public abstract class FaweChunk<T> implements Callable<FaweChunk> {
      */
     public
     @Nullable
-    char[] getIdArray(int layer) {
-        char[] ids = new char[4096];
+    int[] getIdArray(int layer) {
+        int[] ids = new int[4096];
         int by = layer << 4;
         int index = 0;
         for (int y = 0; y < 16; y++) {
             int yy = by + y;
             for (int z = 0; z < 16; z++) {
                 for (int x = 0; x < 16; x++) {
-                    ids[index++] = (char) getBlockCombinedId(x, yy, z);
+                    ids[index++] = getBlockCombinedId(x, yy, z);
                 }
             }
         }
@@ -178,8 +178,8 @@ public abstract class FaweChunk<T> implements Callable<FaweChunk> {
         }
     }
 
-    public char[][] getCombinedIdArrays() {
-        char[][] ids = new char[HEIGHT >> 4][];
+    public int[][] getCombinedIdArrays() {
+        int[][] ids = new int[HEIGHT >> 4][];
         for (int y = 0; y < HEIGHT >> 4; y++) {
             int y4 = y >> 4;
             short[][] i1 = FaweCache.CACHE_J[y];
@@ -190,12 +190,12 @@ public abstract class FaweChunk<T> implements Callable<FaweChunk> {
                     if (combined == 0) {
                         continue;
                     }
-                    char[] array = ids[y4];
+                    int[] array = ids[y4];
                     if (array == null) {
-                        array = ids[y4] = new char[4096];
+                        array = ids[y4] = new int[4096];
                     }
                     int index = i2[x];
-                    array[index] = (char) combined;
+                    array[index] = combined;
                 }
             }
         }

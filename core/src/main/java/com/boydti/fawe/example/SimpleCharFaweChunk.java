@@ -10,7 +10,7 @@ public class SimpleCharFaweChunk extends CharFaweChunk {
         super(parent, x, z);
     }
 
-    public SimpleCharFaweChunk(FaweQueue parent, int x, int z, char[][] ids, short[] count, short[] air, byte[] heightMap) {
+    public SimpleCharFaweChunk(FaweQueue parent, int x, int z, int[][] ids, short[] count, short[] air, byte[] heightMap) {
         super(parent, x, z, ids, count, air, heightMap);
     }
 
@@ -26,7 +26,7 @@ public class SimpleCharFaweChunk extends CharFaweChunk {
             copy = new SimpleCharFaweChunk(getParent(), getX(), getZ(), ids, count, air, heightMap);
             copy.biomes = biomes;
         } else {
-            copy = new SimpleCharFaweChunk(getParent(), getX(), getZ(), (char[][]) MainUtil.copyNd(ids), count.clone(), air.clone(), heightMap.clone());
+            copy = new SimpleCharFaweChunk(getParent(), getX(), getZ(), (int[][]) MainUtil.copyNd(ids), count.clone(), air.clone(), heightMap.clone());
             copy.biomes = biomes != null ? biomes.clone() : null;
         }
         return copy;

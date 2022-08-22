@@ -33,7 +33,7 @@ public class NukkitChunk extends CharFaweChunk<BaseFullChunk, NukkitQueue> {
         super(parent, x, z);
     }
 
-    public NukkitChunk(FaweQueue parent, int x, int z, char[][] ids, short[] count, short[] air, byte[] heightMap) {
+    public NukkitChunk(FaweQueue parent, int x, int z, int[][] ids, short[] count, short[] air, byte[] heightMap) {
         super(parent, x, z, ids, count, air, heightMap);
     }
 
@@ -45,7 +45,7 @@ public class NukkitChunk extends CharFaweChunk<BaseFullChunk, NukkitQueue> {
             copy.biomes = biomes;
             copy.chunk = chunk;
         } else {
-            copy = new NukkitChunk(getParent(), getX(), getZ(), (char[][]) MainUtil.copyNd(ids), count.clone(), air.clone(), heightMap.clone());
+            copy = new NukkitChunk(getParent(), getX(), getZ(), (int[][]) MainUtil.copyNd(ids), count.clone(), air.clone(), heightMap.clone());
             copy.biomes = biomes != null ? biomes.clone() : null;
             copy.chunk = chunk;
         }
@@ -77,7 +77,7 @@ public class NukkitChunk extends CharFaweChunk<BaseFullChunk, NukkitQueue> {
         Level world = ((NukkitQueue) getParent()).getWorld();
         final BaseFullChunk chunk = getChunk();
         getParent().setHeightMap(this, heightMap);
-        char[][] sections = getCombinedIdArrays();
+        int[][] sections = getCombinedIdArrays();
         final int X = getX() << 4;
         final int Z = getZ() << 4;
         if (biomes != null) {
@@ -107,7 +107,7 @@ public class NukkitChunk extends CharFaweChunk<BaseFullChunk, NukkitQueue> {
                     int x = ent.getFloorX() & 15;
                     int y = ent.getFloorY();
                     int z = ent.getFloorZ() & 15;
-                    char[] idsLayer = this.ids[y >> 4];
+                    int[] idsLayer = this.ids[y >> 4];
                     if (idsLayer != null) {
                         if (idsLayer[FaweCache.CACHE_J[y][z][x]] != 0) {
                             synchronized (world) {
@@ -121,7 +121,7 @@ public class NukkitChunk extends CharFaweChunk<BaseFullChunk, NukkitQueue> {
         }
 
         for (int layer = 0; layer < sections.length; layer++) {
-            char[] ids = sections[layer];
+            int[] ids = sections[layer];
             if (ids == null) {
                 continue;
             }
@@ -130,18 +130,17 @@ public class NukkitChunk extends CharFaweChunk<BaseFullChunk, NukkitQueue> {
             for (int y = by; y < by + 16; y++) {
                 for (int z = 0; z < 16; z++) {
                     for (int x = 0; x < 16; x++,index++) {
-                        char combined = ids[index];
+                        int combined = ids[index];
                         switch (combined) {
                             case 0:
                                 continue;
                             case 1:
-                                chunk.setBlockId(x, y, z, 0);
+                                chunk.setBlock(0, x, y, z, 0);
                                 continue;
                             default:
                                 int id = FaweCache.getId(combined);
                                 int data = FaweCache.getData(combined);
-                                chunk.setBlockId(x, y, z, id);
-                                chunk.setBlockData(x, y, z, data);
+                                chunk.setBlock(0, x, y, z, id, data);
                                 if (FaweCache.hasNBT(id)) {
                                     CompoundTag tile = getTile(x, y, z);
                                     if (tile != null) {

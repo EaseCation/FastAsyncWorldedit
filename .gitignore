@@ -16,12 +16,14 @@ gradle.log
 /core/lib
 /bukkit/lib
 /core/build
+/core/target
 /forge189/build
 /forge1710/build
 /sponge/build
 /sponge111/build
 /bukkit/out
 /nukkit/out
+/nukkit/target
 /sponge112/build
 /core/out
 /bukkit/build

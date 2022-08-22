@@ -83,8 +83,8 @@ public class BundledBlockData {
      * @throws IOException thrown on I/O error
      */
     public void loadFromResource() throws IOException {
-        URL url = WorldEdit.getInstance().getClass().getResource("/com/sk89q/worldedit/world/registry/blocks.json");
-        add(url, false);
+//        URL url = WorldEdit.getInstance().getClass().getResource("/com/sk89q/worldedit/world/registry/blocks.json");
+//        add(url, false);
     }
 
     public void add(URL url, boolean overwrite) throws IOException {
